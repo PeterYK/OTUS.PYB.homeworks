@@ -11,10 +11,6 @@ def get_all_contacts() -> list:
     Returns:
         list: list of all contacts as a list of lists. Each contact is a list of strings.     
     """
-
-    # with open(FILE_NAME, "r", encoding="utf-8") as f:
-    #     reader = csv.reader(f)
-    #     contacts = list(reader)
     contacts = fetch_contacts_from_file()
     return contacts
 
@@ -68,13 +64,6 @@ def select_found_contact(contacts: list) -> list:
             is_incorrect_index = False
 
     return contacts[selected_contact_index]
-    # selected_contact_index =  enter_int_value("Введите порядковый номер контакта: ")
-    # if selected_contact_index >= len(contacts) or selected_contact_index <= 0:
-    #     print(f'Вы ввели {selected_contact_index}, в найденных контактах всего {len(contacts) - 1}. Попробуйте снова:')
-    #     select_found_contact(contacts)
-    # else:
-    #     show_contact_menu(contacts[selected_contact_index])
-
 
 def find_contacts() -> list:
     """
@@ -95,15 +84,8 @@ def find_contacts() -> list:
         if part.lower() in item[0].lower() or part.lower() in item[1].lower():
             found_contacts.append(item)
 
-    # if len(found_contacts) < 2: 
-    #     if resume_find(part):
-    #         find_contacts()
-    #     else:
-    #         show_menu()
-    #         return
     if len(found_contacts) < 2: 
         return []
-    # show_found_contacts(found_contacts)
     return found_contacts
 
 def resume_find(part: str) -> bool:
@@ -183,14 +165,8 @@ def edit_contact(contact: list):
     found_contact[0] = name
     found_contact[1] = phone_number
     found_contact[2] = comment
-    # with open(FILE_NAME, "w", encoding="utf-8", newline="") as f:
-    #     writer = csv.writer(f)
-    #     writer.writerows(all_contacts)
     update_contacts(all_contacts)
     print(f'\nКонтакт обновлен:\n{found_contact[0]}\t\t{found_contact[1]}\t\t{found_contact[2]}\n')
-    # show_contacts()
-    # show_menu()
-
 
 def remove_contact(contact: list):
     """
@@ -214,15 +190,6 @@ def remove_contact(contact: list):
     if accept_to_delete == 'n':
         return
 
-    # accept_to_delete = enter_string_value('Вы действительно хотите удалить контакт? \nВведите "y"/"n": ')
-
-    # if accept_to_delete != 'y' and accept_to_delete != 'n':
-    #     remove_contact(contact)
-    #     return
-    # elif accept_to_delete == 'n':
-    #     show_contact_menu(contact)
-    #     return
-    
     all_contacts = get_all_contacts()
     found_contact = []
     for item in all_contacts:
@@ -231,15 +198,8 @@ def remove_contact(contact: list):
             break
     else:
         print(f"Этот контакт не найден в телефонной книге")
-        # show_menu()
         return
     
     all_contacts.remove(found_contact)
     update_contacts(all_contacts)
-    # with open(FILE_NAME, "w", encoding="utf-8", newline="") as f:
-    #     writer = csv.writer(f)
-    #     writer.writerows(all_contacts)
-
     print(f'Контакт УДАЛЕН:\n{found_contact[0]}\t\t{found_contact[1]}\t\t{found_contact[2]}\n')
-    # show_contacts()
-    # show_menu()

@@ -157,6 +157,15 @@ def show_found_contacts_menu(contacts: list):
         show_menu()
 
 def try_to_find_contact():
+    """
+        Viewmodules func for performs any logics for search contact
+        
+        Args: 
+            None
+        
+        Returns:
+            None    
+        """
     contacts = find_contacts()
     if len(contacts) == 0:
         if resume_find():
@@ -168,14 +177,12 @@ def try_to_find_contact():
     show_found_contacts(contacts)    
     show_found_contacts_menu(contacts)
     
-
-
 def resume_find() -> bool:
     """
     Support function for resuming contact search.
     
     Args: 
-        part(str): part of the name or phone number to search for.
+        None
     
     Returns:
         None    
