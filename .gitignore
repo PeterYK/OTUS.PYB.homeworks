@@ -10,6 +10,7 @@ dist/
 *.egg
 
 # Virtual Environment
+Homework_02_mvc_with_classes/.venv/
 Homework_02_mvc_with_classes/venv/
 
 # IDE / Editor
