@@ -59,3 +59,4 @@ def update_contacts(contacts: list):
     with open(FILE_NAME, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(contacts)
+

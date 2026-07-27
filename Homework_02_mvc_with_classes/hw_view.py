@@ -46,27 +46,27 @@ def show_menu():
         delete_all_contacts()
         show_menu()
 
-def show_contacts():
-    """
-    Show all contacts in the contacts list.
+# def show_contacts():
+#     """
+#     Show all contacts in the contacts list.
     
-    Args: 
-        None
+#     Args: 
+#         None
     
-    Returns:
-        None    
-    """
+#     Returns:
+#         None    
+#     """
 
-    contacts = get_all_contacts()
-    print(f"\nContacts:\n")
-    index = 0
-    for item in contacts:
-        if index == 0:
-            print(f"{item[0]}\t\t{item[1]}\t\t{item[2]}\n")
-        else:
-            print(f"{index}. {item[0]}\t\t{item[1]}\t\t{item[2]}")
-        index += 1
-    show_menu()
+#     contacts = get_all_contacts()
+#     print(f"\nContacts:\n")
+#     index = 0
+#     for item in contacts:
+#         if index == 0:
+#             print(f"{item[0]}\t\t{item[1]}\t\t{item[2]}\n")
+#         else:
+#             print(f"{index}. {item[0]}\t\t{item[1]}\t\t{item[2]}")
+#         index += 1
+#     show_menu()
 
 
 def show_contact_menu(contact: list):
@@ -103,79 +103,79 @@ def show_contact_menu(contact: list):
         print(f"'{number}' - нет такого пункта меню. Выберите корректный пункт меню (введите число).")
         show_contact_menu(contact)
 
-def show_found_contacts(contacts: list):
-    """
-    Show found contacts in the contacts list.
+# def show_found_contacts(contacts: list):
+#     """
+#     Show found contacts in the contacts list.
     
-    Args: 
-        contacts(list): found contacts data as a list of list.
+#     Args: 
+#         contacts(list): found contacts data as a list of list.
     
-    Returns:
-        None    
-    """
+#     Returns:
+#         None    
+#     """
 
-    print(f"\nFound contacts:\n")
-    index = 0
-    for item in contacts:
-        if index == 0:
-            print(f"{item[0]}\t\t{item[1]}\t\t{item[2]}\n")
-        else:
-            print(f"{index}. {item[0]}\t\t{item[1]}\t\t{item[2]}")
-        index += 1
+#     print(f"\nFound contacts:\n")
+#     index = 0
+#     for item in contacts:
+#         if index == 0:
+#             print(f"{item[0]}\t\t{item[1]}\t\t{item[2]}\n")
+#         else:
+#             print(f"{index}. {item[0]}\t\t{item[1]}\t\t{item[2]}")
+#         index += 1
 
-def show_found_contacts_menu(contacts: list):
-    """
-    Show the found contacts menu.
+# def show_found_contacts_menu(contacts: list):
+#     """
+#     Show the found contacts menu.
     
-    Args: 
-        contacts(list): before found contacts as a list of lists.
+#     Args: 
+#         contacts(list): before found contacts as a list of lists.
     
-    Returns:
-        None    
-    """
-    print('''
-*************************************
-*       Найденные контакты:        *
-          ''')
-    print('''
- 1. выбрать контакт
- 2. главное меню
-          ''')
-    is_incorrect_number = True
-    while is_incorrect_number:
-        number = enter_int_value("\nВыберите опцию меню (введите число): ")
-        if number in [1, 2]:
-            is_incorrect_number = False
+#     Returns:
+#         None    
+#     """
+#     print('''
+# *************************************
+# *       Найденные контакты:        *
+#           ''')
+#     print('''
+#  1. выбрать контакт
+#  2. главное меню
+#           ''')
+#     is_incorrect_number = True
+#     while is_incorrect_number:
+#         number = enter_int_value("\nВыберите опцию меню (введите число): ")
+#         if number in [1, 2]:
+#             is_incorrect_number = False
 
-    if number == 1:
-        contact = select_found_contact(contacts)
-        if len(contact) == 0:
-            show_menu()
-        else:
-            show_contact_menu(contact)
-    elif number == 2:
-        show_menu()
+#     if number == 1:
+#         contact = select_found_contact(contacts)
+#         if len(contact) == 0:
+#             show_menu()
+#         else:
+#             show_contact_menu(contact)
+#     elif number == 2:
+#         show_menu()
 
-def try_to_find_contact():
-    """
-        Viewmodules func for performs any logics for search contact
+# def try_to_find_contact():
+#     """
+#         Viewmodules func for performs any logics for search contact
         
-        Args: 
-            None
+#         Args: 
+#             None
         
-        Returns:
-            None    
-        """
-    contacts = find_contacts()
-    if len(contacts) == 0:
-        if resume_find():
-            try_to_find_contact()
-            return
-        else:
-            show_menu()
-            return
-    show_found_contacts(contacts)    
-    show_found_contacts_menu(contacts)
+#         Returns:
+#             None    
+#         """
+#     contacts = find_contacts()
+#     if len(contacts) == 0:
+#         if resume_find():
+#             try_to_find_contact()
+#             return
+#         else:
+#             show_menu()
+#             return
+#     show_found_contacts(contacts)    
+#     show_found_contacts_menu(contacts)
     
 def resume_find() -> bool:
     """
