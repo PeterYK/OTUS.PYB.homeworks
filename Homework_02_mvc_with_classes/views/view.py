@@ -1,4 +1,4 @@
-from hw_utils import enter_int_value, enter_string_value
+from utils import enter_int_value, enter_string_value
 from models.contact import Contact
 
 class ConsoleView:
@@ -25,7 +25,7 @@ class ConsoleView:
 2. создать контакт
 3. найти контакт
 4. выбрать контакт
-5. удалить все контакты(non)
+5. удалить все контакты
             ''')
 
     def user_select_main_menu(self) -> int:
@@ -100,7 +100,7 @@ class ConsoleView:
 
     def user_select_found_contacts_menu(self) -> int:
         """
-        Show the found contacts menu.
+        Selecting found contacts menu.
         
         Args: 
             None
@@ -136,7 +136,24 @@ class ConsoleView:
  2. удалить контакт
  3. главное меню
           ''')
+
+    def user_select_contact_menu(self) -> int:
+        """
+        Selecting contact menu.
         
+        Args: 
+            None
+        
+        Returns:
+            int (selected menu option)    
+        """
+        is_incorrect_number = True
+        while is_incorrect_number:
+            number = enter_int_value("\nВыберите опцию меню (введите число): ")
+            if number in [1, 2, 3]:
+                is_incorrect_number = False
+        return number
+            
     def enter_part_of_contact(self) -> str:
         """
         Find contacts in the contacts list by part of the name or phone number.
@@ -150,7 +167,7 @@ class ConsoleView:
         part = enter_string_value("Введите часть имени или номера телефона для поиска: ")
         return part
 
-    def select_found_contact(self, contacts: list) -> int:
+    def select_contact(self, contacts: list) -> int:
         """
         Select contact from the found contacts list.
         
@@ -174,3 +191,33 @@ class ConsoleView:
                 is_incorrect_index = False
 
         return selected_contact_index
+
+    def show_removed_contact(self, contact: Contact, contacts: list[Contact]):
+        """
+        Show removed contact.
+        
+        Args: 
+            contact(list): contact data as a list of strings.
+        
+        Returns:
+            None    
+        """
+        if contact in contacts:
+            print(f'\n*** Не удалось удалить контакт {contact.name}|{contact.phone}|{contact.comment} ***\n')
+        else:
+            print(f'\n*** Контакт {contact.name}|{contact.phone}|{contact.comment} удален ***\n')
+
+    def enter_contact_data(self) -> list:
+        """
+        User entering a new contact data as a list of strings.
+        
+        Args: 
+            None
+        
+        Returns:
+            list[str]    
+        """
+        name = enter_string_value("Введите данные: \nимя - ")
+        phone_number = enter_string_value("Номер телефона - ")
+        comment = enter_string_value("Комментарий - ")
+        return [name, phone_number, comment]

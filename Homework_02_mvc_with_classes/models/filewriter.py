@@ -17,6 +17,7 @@ class FileWriter:
         Returns:
             None    
         """        
+        print(data)
         with open(self.file_name, "w", encoding="utf-8", newline="") as f:
             writer = csv.writer(f)
             writer.writerows(data)

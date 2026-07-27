@@ -1,4 +1,5 @@
 from models.phonebook import PhoneBook
+from models.contact import Contact
 from views.view import ConsoleView
 
 class ViewController:
@@ -13,27 +14,44 @@ class ViewController:
         self.show_main_menu()
 
     def show_main_menu(self):
+        """
+        Function for show main menu.
+        
+        Args: 
+            None
+        
+        Returns:
+            None    
+        """
         self.view.show_main_menu()
         index = self.view.user_select_main_menu()
         self.select_main_menu(index)
 
     def select_main_menu(self, index: int):
+        """
+        Find a contact by name.
+        
+        Args: 
+            index (int): Index of menu.
+        
+        Returns:
+            None    
+        """
+
         if index == 1:
             contacts = self.phonebook.contacts
             self.view.show_contacts(contacts)
             self.show_main_menu()
         elif index == 2:
-            # create_contact()
-            # show_menu()
+            self.create_contact()
+            self.show_main_menu()
             pass
         elif index == 3:
             self.find_contact()
         elif index == 4:
-            # contact = select_contact()  
-            # show_contact_menu(contact)      
-            pass
+            self.select_contact()            
         elif index == 5:
-            # delete_all_contacts()
+            self.phonebook.remove_all_contacts()
             self.show_main_menu()
             pass
 
@@ -69,10 +87,46 @@ class ViewController:
             if len(contacts) == 1:  # No contacts found (first contact is a header row).
                 self.show_main_menu()
             else:
-                contact_index = self.view.select_found_contact(contacts)
+                contact_index = self.view.select_contact(contacts)
                 if contact_index == 0:
                     self.show_main_menu()
                 else:
-                    self.view.show_contact_menu(contacts[contact_index])
+                    contact = contacts[contact_index]
+                    self.view.show_contact_menu(contact)
+                    self.select_contact_menu(contact)
         elif index == 2:
             self.show_main_menu()
+
+    def select_contact_menu(self, contact: Contact):
+        index = self.view.user_select_contact_menu()
+        if index == 1:
+            self.edit_contact(contact)
+            self.show_main_menu()
+        elif index == 2:
+            self.remove_contact(contact)
+            self.show_main_menu()
+        elif index == 3:
+            self.show_main_menu()
+
+    def remove_contact(self, contact: Contact):
+        self.phonebook.remove(contact)
+        self.view.show_removed_contact(contact, self.phonebook.contacts)
+
+    def create_contact(self):
+        contact_data = self.view.enter_contact_data()
+        new_contact = Contact(contact_data[0], contact_data[1], contact_data[2])
+        self.phonebook.add_contact(new_contact)
+
+    def edit_contact(self, contact: Contact):
+        contact_data = self.view.enter_contact_data()
+        contact.name = contact_data[0]
+        contact.phone = contact_data[1]
+        contact.comment = contact_data[2]
+        self.phonebook.edit_contact(contact)
+
+    def select_contact(self):
+        contacts = self.phonebook.contacts
+        contact_index = self.view.select_contact(contacts)
+        contact = contacts[contact_index]
+        self.view.show_contact_menu(contact)
+        self.select_contact_menu(contact)  

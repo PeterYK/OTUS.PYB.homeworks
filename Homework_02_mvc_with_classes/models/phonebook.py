@@ -38,34 +38,36 @@ class PhoneBook:
             return []
         return found_contacts
 
-    def select_contact(self, index: int) -> Contact:
-        """
-        Select a contact from the contacts list by index.
-        
-        Args: 
-            index (int): The index of the contact to select.
-        """
-        
-    # def add_contact(self, contact: PhoneContact):
-    #     """
-    #     Add a new contact to the phone book.
-        
-    #     Args: 
-    #         contact (PhoneContact): The contact to add.
-        
-    #     Returns:
-    #         None    
-    #     """        
-    #     self.contacts.append(contact.to_list())
-    #     add_contact(contact.to_list())
+    def remove(self, contact: Contact):
+        if contact in self.contacts:
+            self.contacts.remove(contact)
 
-    # def update_contact(self, index: int, contact: PhoneContact):
-    #     """
-    #     Update an existing contact in the phone book.
-        
-    #     Args: 
-    #         index (int): The index of the contact to update.
-    #         contact (PhoneContact): The updated contact data.
-    #     """
-    #     self.contacts[index] = contact.to_list()
-    #     update_contacts(self.contacts)
+        contacts_list = [] 
+        for contact in self.contacts:
+            contacts_list.append([contact.name, contact.phone, contact.comment])
+        self.fwriter.write_file(contacts_list)
+
+    def add_contact(self, contact: Contact):
+        self.contacts.append(contact)
+        contacts_list = [] 
+        for contact in self.contacts:
+            contacts_list.append([contact.name, contact.phone, contact.comment])
+        self.fwriter.write_file(contacts_list)
+
+
+    def edit_contact(self, updatedContact: Contact):
+        if updatedContact in self.contacts:
+            contacts_list = [] 
+            for contact in self.contacts:
+                contacts_list.append([contact.name, contact.phone, contact.comment])
+            self.fwriter.write_file(contacts_list)
+            print(f"Удалось обвновить контакт {updatedContact}")
+        else:
+            print(f"Не удалось обвновить контакт {updatedContact}")
+
+    def remove_all_contacts(self): 
+        contact = Contact("name", "phone", "comment")
+        self.contacts = []
+        self.contacts.append(contact)
+        clear_contacts = [["name", "phone", "comment"]]
+        self.fwriter.write_file(clear_contacts)
