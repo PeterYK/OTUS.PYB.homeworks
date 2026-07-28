@@ -1,6 +1,7 @@
 from models.filereader import FileReader
 from models.filewriter import FileWriter
 from models.contact import Contact
+from exceptions import *
 
 class PhoneBook:
     """
@@ -10,7 +11,17 @@ class PhoneBook:
     fwriter = FileWriter("data/phonebook.csv")
 
     def __init__(self):
-        raw_list = self.freader.read_file()
+        try:
+            raw_list = self.freader.read_file()
+        except ContactsFileNotFoundError:
+            print(f"Файл '{self.freader.file_name}' не найден. Создаю новый файл.")
+            try:
+                self.fwriter.write_file([["name", "phone", "comment"]])
+            except DataNotSavedError as err:
+                print(f"Не удалось создать файл для работы приложения. Закрываем приложение")
+                return
+            raw_list = self.freader.read_file()
+
         contacts = []
         for item in raw_list:
             contact = Contact(item[0], item[1], item[2])
@@ -35,7 +46,7 @@ class PhoneBook:
                 found_contacts.append(contact)
 
         if len(found_contacts) == 1: # Ignoring a header row.
-            return []
+            raise ContactNotFoundError(part)
         return found_contacts
 
     def remove(self, contact: Contact):
@@ -45,29 +56,38 @@ class PhoneBook:
         contacts_list = [] 
         for contact in self.contacts:
             contacts_list.append([contact.name, contact.phone, contact.comment])
-        self.fwriter.write_file(contacts_list)
+        try:
+            self.fwriter.write_file(contacts_list)
+        except DataNotSavedError:
+            raise
 
     def add_contact(self, contact: Contact):
         self.contacts.append(contact)
         contacts_list = [] 
         for contact in self.contacts:
             contacts_list.append([contact.name, contact.phone, contact.comment])
-        self.fwriter.write_file(contacts_list)
+        try:
+            self.fwriter.write_file(contacts_list)
+        except DataNotSavedError:
+            raise
 
 
     def edit_contact(self, updatedContact: Contact):
-        if updatedContact in self.contacts:
-            contacts_list = [] 
-            for contact in self.contacts:
-                contacts_list.append([contact.name, contact.phone, contact.comment])
-            self.fwriter.write_file(contacts_list)
-            print(f"Удалось обвновить контакт {updatedContact}")
-        else:
-            print(f"Не удалось обвновить контакт {updatedContact}")
+        contacts_list = [] 
+        for contact in self.contacts:
+            contacts_list.append([contact.name, contact.phone, contact.comment])
+        try:                self.fwriter.write_file(contacts_list)
+        except DataNotSavedError:
+            raise
 
     def remove_all_contacts(self): 
-        contact = Contact("name", "phone", "comment")
-        self.contacts = []
-        self.contacts.append(contact)
         clear_contacts = [["name", "phone", "comment"]]
-        self.fwriter.write_file(clear_contacts)
+        try:
+            self.fwriter.write_file(clear_contacts)
+        except DataNotSavedError as err:
+            raise
+        else:
+            contact = Contact("name", "phone", "comment")
+            self.contacts = []
+            self.contacts.append(contact)
+

@@ -1,4 +1,5 @@
 import csv
+from exceptions import *
 
 class FileReader:
     """
@@ -17,7 +18,11 @@ class FileReader:
         Returns:
             list (list of data from the file)    
         """        
-        with open(self.file_name, "r", encoding="utf-8") as f:
-            reader = csv.reader(f)
-            data = list(reader)
-        return data
+        try:
+            with open(self.file_name, "r", encoding="utf-8") as f:
+                reader = csv.reader(f)
+                data = list(reader)
+        except:
+            raise ContactsFileNotFoundError(self.file_name)
+        else:
+            return data

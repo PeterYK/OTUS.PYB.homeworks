@@ -1,6 +1,7 @@
 from models.phonebook import PhoneBook
 from models.contact import Contact
 from views.view import ConsoleView
+from exceptions import *
 
 class ViewController:
     """
@@ -51,7 +52,10 @@ class ViewController:
         elif index == 4:
             self.select_contact()            
         elif index == 5:
-            self.phonebook.remove_all_contacts()
+            try:
+                self.phonebook.remove_all_contacts()
+            except DataNotSavedError as err:
+                self.view.show_error_message(f"Не удалось удалить все контакты. Ошибка: {str(err)}")
             self.show_main_menu()
             pass
 
@@ -66,8 +70,30 @@ class ViewController:
             list: A list of contacts that match the search criteria.    
         """
         part = self.view.enter_part_of_contact()
-        found_contacts = self.phonebook.find_contact(part)
-        self.run_found_contacts_menu(found_contacts)
+        try:
+            found_contacts = self.phonebook.find_contact(part)
+        except ContactNotFoundError as err:
+            self.view.show_error_message(str(err))
+            self.resume_finding()
+        else:
+            self.run_found_contacts_menu(found_contacts)
+
+    def resume_finding(self):
+        """
+        Resume finding a contact by name.
+        
+        Args: 
+            None
+        
+        Returns:
+            None    
+        """
+        self.view.resume_finding_menu()
+        index = self.view.selecting_resume_finding_menu()
+        if index == 1:
+            self.find_contact()
+        elif index == 2:
+            self.show_main_menu()
 
     def run_found_contacts_menu(self, contacts: list):
         """
@@ -109,20 +135,30 @@ class ViewController:
             self.show_main_menu()
 
     def remove_contact(self, contact: Contact):
-        self.phonebook.remove(contact)
-        self.view.show_removed_contact(contact, self.phonebook.contacts)
+        try:
+            self.phonebook.remove(contact)
+        except DataNotSavedError as err:
+            self.view.show_error_message(f"Не удалось удалить контакт. Ошибка: {str(err)}")
+        else:
+            self.view.show_removed_contact(contact, self.phonebook.contacts)
 
     def create_contact(self):
         contact_data = self.view.enter_contact_data()
         new_contact = Contact(contact_data[0], contact_data[1], contact_data[2])
-        self.phonebook.add_contact(new_contact)
+        try:
+            self.phonebook.add_contact(new_contact)
+        except DataNotSavedError as err:
+            self.view.show_error_message(f"Не удалось добавить контакт. Ошибка: {str(err)}")   
 
     def edit_contact(self, contact: Contact):
         contact_data = self.view.enter_contact_data()
         contact.name = contact_data[0]
         contact.phone = contact_data[1]
         contact.comment = contact_data[2]
-        self.phonebook.edit_contact(contact)
+        try:
+            self.phonebook.edit_contact(contact)
+        except DataNotSavedError as err:
+            self.view.show_error_message(f"Не удалось обновить контакт. Ошибка: {str(err)}")
 
     def select_contact(self):
         contacts = self.phonebook.contacts

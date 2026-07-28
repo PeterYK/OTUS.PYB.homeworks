@@ -221,3 +221,41 @@ class ConsoleView:
         phone_number = enter_string_value("Номер телефона - ")
         comment = enter_string_value("Комментарий - ")
         return [name, phone_number, comment]
+
+    def show_error_message(self, message: str):
+        """
+        Show error message.
+        
+        Args: 
+            message(str): error message.
+        
+        Returns:
+            None    
+        """
+        print(f'\n*** {message} ***\n')
+
+    def resume_finding_menu(self):
+        """
+        Show resume finding message.
+           
+        Args: 
+            None
+           
+        Returns:
+            None    
+        """
+        print('''
+ 1. продолжить поиск
+ 2. главное меню
+          ''')
+
+    def selecting_resume_finding_menu(self) -> int:
+        is_valide_command = False
+        while not is_valide_command:
+            number = enter_int_value("\nВыберите опцию меню (введите число): ")
+            if number in [1, 2]:
+                is_valide_command = True
+            else:
+                print(f"'{number}' - нет такого пункта меню. Выдерите корректный пункт меню (введите число).")
+
+        return number

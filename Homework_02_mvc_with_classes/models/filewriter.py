@@ -1,4 +1,5 @@
 import csv
+from exceptions import DataNotSavedError
 
 class FileWriter:
     """
@@ -16,8 +17,10 @@ class FileWriter:
         
         Returns:
             None    
-        """        
-        print(data)
-        with open(self.file_name, "w", encoding="utf-8", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerows(data)
+        """     
+        try:   
+            with open(self.file_name, "w", encoding="utf-8", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerows(data)
+        except:
+            raise DataNotSavedError(self.file_name)
